@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc --noEmit -p tsconfig.json",
+    "render:build": "prisma generate && tsc --noEmit -p tsconfig.json",
     "start": "tsx src/server.ts",
     "db:migrate": "prisma migrate dev --name init && prisma generate",
+    "db:deploy": "prisma migrate deploy && prisma generate",
     "db:generate": "prisma generate",
     "db:studio": "prisma studio",
     "db:validate": "prisma validate",

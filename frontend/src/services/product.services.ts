@@ -1,7 +1,8 @@
 import { RequiredProductSchema, RequiredProductsSchema } from "../../../shared/product.schemas";
+import { apiUrl } from "./api";
 
 export async function getActiveRequiredProduct() {
-    const response = await fetch("/api/products");
+    const response = await fetch(apiUrl("/api/products"));
     if (!response.ok) {
         throw new Error("err_invalid_response");
     }
@@ -11,7 +12,7 @@ export async function getActiveRequiredProduct() {
 }
 
 export async function updateRequiredProductDefaultQuantity(requiredProductId: string, defaultQuantity: number) {
-    const response = await fetch(`/api/products/${requiredProductId}/default-quantity`, {
+    const response = await fetch(apiUrl(`/api/products/${requiredProductId}/default-quantity`), {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",

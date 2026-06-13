@@ -1,7 +1,8 @@
 import { CreateOrderType } from "../../../shared/order.schemas";
+import { apiUrl } from "./api";
 
 export async function createOrder(order: CreateOrderType) {
-    const response = await fetch("/api/orders", {
+    const response = await fetch(apiUrl("/api/orders"), {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
