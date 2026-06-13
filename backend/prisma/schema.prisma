@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Restaurant {
+  id String @id @default(uuid())
+  name String
+  
+  users User[]
+  requiredProducts RequiredProduct[]
+  suppliers Supplier[]
+  orders Order[]
+}
+
+model User {
+  id String @id @default(uuid())
+  name String
+
+  orders Order[]
+
+  restaurantId String
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id])
+}
+
+model RequiredProduct {
+  id String @id @default(uuid())
+  name String 
+  defaultQuantity Decimal
+  defaultUnit String
+  isActive Boolean @default(true)
+
+  orderLines OrderLine[]
+
+  restaurantId String
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id])
+  supplierId String
+  supplier Supplier @relation(fields: [supplierId], references: [id])
+
+  @@unique([restaurantId, name])
+}
+
+model Supplier {
+  id String @id @default(uuid())
+  name String 
+  phone String?
+  isActive Boolean @default(true)
+
+  requiredProducts RequiredProduct[]
+
+  restaurantId String
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id])
+
+  @@unique([restaurantId, name])
+}
+
+model Order {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  orderStatus OrderStatus @default(DRAFT)
+
+  orderLines OrderLine[]
+
+  restaurantId String
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id])
+  userId String
+  user User @relation(fields: [userId], references: [id])
+}
+
+model OrderLine {
+  id String @id @default(uuid())
+  nameSnapshot String
+  quantityOrdered Decimal
+  unitSnapshot String
+  supplierSnapshot String
+  isDelivered Boolean @default(false)
+
+  requiredProductId String
+  requiredProduct RequiredProduct @relation(fields: [requiredProductId], references: [id])
+
+  orderId String
+  order Order @relation(fields: [orderId], references: [id])
+}
+
+enum OrderStatus {
+  DRAFT
+  UNDER_REVIEW
+  SENT
+}

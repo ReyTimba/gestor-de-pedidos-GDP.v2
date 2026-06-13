@@ -1,0 +1,74 @@
+Proyecto Gestor de pedidos - GDP.v2
+
+Objetivo:
+¿Que problema real se intenta resolver?
+- Ayudar a decidir qué pedir para el día siguiente.
+
+Procesos:
+- revisar cada producto y en funcion de lo que queda, decidir a ojo, cuanto pedir para mañana.
+
+Entidades:
+- Restaurant
+- User
+- RequiredProduct
+- Supplier
+- Order
+- OrderLine
+
+Estados:
+- RequiredProduct
+    isActive
+    isInSeason?
+- Supplier:
+    isActive
+- Order:
+    orderStatus = "draft" | "under_review" | "sent";
+- OrderLine
+    isDelivered 
+
+
+Datos:
+- Restaurant
+    id
+    name
+    User[]
+    RequiredProduct[]
+    Supplier[]
+    Order[]
+- User
+    id
+    name
+    restaurantId
+- RequiredProduct
+    id
+    name
+    defaultQuantity
+    defaultUnit
+    isActive
+    isInSeason?
+    restaurantId
+    supplierId
+- Supplier
+    id
+    name
+    phone
+    isActive
+    RequiredProduct[]
+    restaurantId
+- Order
+    id
+    createdAt
+    orderStatus
+    restaurantId
+    userId
+    OrderLine[]
+- OrderLine
+    id
+    nameSnapshot
+    quantityOrdered  Decimal
+    /*quantityReceived Decimal*/
+    unitSnapshot
+    supplierSnapshot
+    isDelivered
+    requiredProductId
+    orderId
