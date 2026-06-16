@@ -140,7 +140,10 @@ export function CurrentOrderView({
                                             line.quantityOrdered + 1
                                         )}
                                     />
-                                <button type="button" onClick={() => onRemoveLine(line.requiredProductId)}>Quitar</button>
+                                <details className="order-line-menu">
+                                    <summary aria-label="Opciones del producto">...</summary>
+                                    <button type="button" onClick={() => onRemoveLine(line.requiredProductId)}>Quitar</button>
+                                </details>
                             </li>
                         ))}
                     </ul>
