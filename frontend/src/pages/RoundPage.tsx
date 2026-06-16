@@ -175,7 +175,6 @@ export default function RoundPage({ view: controlledView, onViewChange }: RoundP
                 skippedProducts={skippedProducts}
                 saving={saving}
                 saveError={saveError}
-                onBackToRound={() => setView("round")}
                 onArchiveOrder={handleArchiveOrder}
                 onQuantityChange={updateOrderLineQuantity}
                 onRemoveLine={removeOrderLine}

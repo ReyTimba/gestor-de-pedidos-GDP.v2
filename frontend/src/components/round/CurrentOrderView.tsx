@@ -12,7 +12,6 @@ type CurrentOrderViewProps = {
     skippedProducts: RequiredProductType[];
     saving: boolean;
     saveError: string | null;
-    onBackToRound: () => void;
     onArchiveOrder: () => void;
     onQuantityChange: (requiredProductId: string, quantityOrdered: number) => void;
     onRemoveLine: (requiredProductId: string) => void;
@@ -26,7 +25,6 @@ export function CurrentOrderView({
     skippedProducts,
     saving,
     saveError,
-    onBackToRound,
     onArchiveOrder,
     onQuantityChange,
     onRemoveLine,
@@ -90,14 +88,6 @@ export function CurrentOrderView({
 
     return (
         <div className="current-order-view">
-            <div className="current-order-header">
-                <button type="button" onClick={onBackToRound}>Volver</button>
-                <div>
-                    <span>PEDIDO ACTUAL</span>
-                    <h1>Revisar pedido</h1>
-                </div>
-            </div>
-
             <div className="order-review-tabs" role="tablist" aria-label="Pedido actual">
                 <button
                     type="button"
