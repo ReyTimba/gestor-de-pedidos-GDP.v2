@@ -11,13 +11,17 @@ export async function getActiveRequiredProduct() {
     return validatedData;
 }
 
-export async function updateRequiredProductDefaultQuantity(requiredProductId: string, defaultQuantity: number) {
+export async function updateRequiredProductDefaults(
+    requiredProductId: string,
+    defaultQuantity: number,
+    defaultUnit: string
+) {
     const response = await fetch(apiUrl(`/api/products/${requiredProductId}/default-quantity`), {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ defaultQuantity }),
+        body: JSON.stringify({ defaultQuantity, defaultUnit }),
     });
 
     if (!response.ok) {

@@ -13,7 +13,8 @@ export const RequiredProductSchema = z.object({
 export const RequiredProductsSchema = z.array(RequiredProductSchema);
 export type RequiredProductType = z.infer<typeof RequiredProductSchema>;
 
-export const UpdateRequiredProductDefaultQuantitySchema = z.object({
+export const UpdateRequiredProductDefaultsSchema = z.object({
     defaultQuantity: z.number().min(0),
+    defaultUnit: z.string().trim().min(1),
 });
-export type UpdateRequiredProductDefaultQuantityType = z.infer<typeof UpdateRequiredProductDefaultQuantitySchema>;
+export type UpdateRequiredProductDefaultsType = z.infer<typeof UpdateRequiredProductDefaultsSchema>;

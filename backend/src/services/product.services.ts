@@ -17,7 +17,11 @@ export async function getActiveProductsOfRestaurant() {
     }));
 }
 
-export async function updateRequiredProductDefaultQuantity(requiredProductId: string, defaultQuantity: number) {
+export async function updateRequiredProductDefaultQuantity(
+    requiredProductId: string,
+    defaultQuantity: number,
+    defaultUnit: string
+) {
     await prisma.requiredProduct.updateMany({
         where: {
             id: requiredProductId,
@@ -25,6 +29,7 @@ export async function updateRequiredProductDefaultQuantity(requiredProductId: st
         },
         data: {
             defaultQuantity,
+            defaultUnit,
         },
     });
 

@@ -130,6 +130,7 @@ export function CurrentOrderView({
                                 </div>
                                     <QuantityStepper
                                         quantity={line.quantityOrdered}
+                                        defaultQuantity={product.defaultQuantity}
                                         unit={product.defaultUnit}
                                         onDecrease={() => onQuantityChange(
                                             line.requiredProductId,
@@ -176,6 +177,7 @@ export function CurrentOrderView({
                                 </div>
                                 <QuantityStepper
                                     quantity={Number(getSkippedQuantity(product)) || 0}
+                                    defaultQuantity={product.defaultQuantity}
                                     unit={product.defaultUnit}
                                     onDecrease={() => updateSkippedQuantity(product, -1)}
                                     onIncrease={() => updateSkippedQuantity(product, 1)}
@@ -229,17 +231,18 @@ function SupplierFilter({ value, suppliers, onChange }: SupplierFilterProps) {
 
 type QuantityStepperProps = {
     quantity: number;
+    defaultQuantity: number;
     unit: string;
     onDecrease: () => void;
     onIncrease: () => void;
 };
 
-function QuantityStepper({ quantity, unit, onDecrease, onIncrease }: QuantityStepperProps) {
+function QuantityStepper({ quantity, defaultQuantity, unit, onDecrease, onIncrease }: QuantityStepperProps) {
     return (
         <div className="order-quantity-stepper">
             <button type="button" aria-label="Restar cantidad" onClick={onDecrease}>-</button>
             <div>
-                <strong>{quantity}</strong>
+                <strong>{quantity} / {defaultQuantity}</strong>
                 <span>{unit}</span>
             </div>
             <button type="button" aria-label="Sumar cantidad" onClick={onIncrease}>+</button>

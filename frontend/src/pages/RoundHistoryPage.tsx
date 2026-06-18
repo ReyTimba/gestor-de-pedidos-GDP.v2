@@ -71,6 +71,7 @@ function RoundHistoryListItem({
                 <span>{formatRoundDate(round.closedAt ?? round.startedAt)}</span>
                 <strong>{summary.suppliersCount} proveedores - {round.orderLines.length} productos</strong>
             </button>
+            {isSelected ? <RoundHistoryDetail round={round} /> : null}
         </li>
     );
 }
@@ -84,14 +85,6 @@ function RoundHistoryDetail({ round }: { round: CurrentRoundType }) {
 
     return (
         <article className="history-round-detail">
-            <header className="history-round-header">
-                <div>
-                    <h2>{formatRoundDate(round.closedAt ?? round.startedAt)}</h2>
-                    <p>{supplierGroups.length} proveedores - {round.orderLines.length} productos pedidos</p>
-                </div>
-                <span>{round.status}</span>
-            </header>
-
             <div className="history-round-metrics">
                 <strong>{round.decisions.length} revisados</strong>
                 <strong>{summary.skippedCount} no pedidos</strong>
@@ -131,7 +124,6 @@ export default function RoundHistoryPage() {
                 const rounds = await getRoundHistory();
                 if (cancelled) return;
                 setHistory(rounds);
-                setSelectedRoundId((currentRoundId) => currentRoundId ?? rounds[0]?.id ?? null);
                 setError(null);
             } catch {
                 if (cancelled) return;
@@ -149,11 +141,6 @@ export default function RoundHistoryPage() {
             cancelled = true;
         };
     }, []);
-
-    const selectedRound = useMemo(
-        () => history.find((round) => round.id === selectedRoundId) ?? history[0] ?? null,
-        [history, selectedRoundId]
-    );
 
     if (loading) {
         return <p className="history-status">Cargando historial...</p>;
@@ -179,15 +166,13 @@ export default function RoundHistoryPage() {
                             <RoundHistoryListItem
                                 key={round.id}
                                 round={round}
-                                isSelected={round.id === selectedRound?.id}
-                                onSelect={() => setSelectedRoundId(round.id)}
+                                isSelected={round.id === selectedRoundId}
+                                onSelect={() => setSelectedRoundId((currentRoundId) => (
+                                    currentRoundId === round.id ? null : round.id
+                                ))}
                             />
                         ))}
                     </ul>
-
-                    {selectedRound ? (
-                        <RoundHistoryDetail round={selectedRound} />
-                    ) : null}
                 </div>
             )}
         </section>

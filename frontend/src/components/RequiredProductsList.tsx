@@ -1,9 +1,19 @@
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import { CreateOrderLineType } from "../../../shared/order.schemas";
 import { RequiredProductType } from "../../../shared/product.schemas"
-import { updateRequiredProductDefaultQuantity } from "../services/product.services";
+import { updateRequiredProductDefaults } from "../services/product.services";
+
+type OrderProduct = {
+    line: CreateOrderLineType;
+    product: RequiredProductType;
+};
 
 export type RequiredProductsListProps = {
-    requiredProducts: RequiredProductType[]
+    requiredProducts: RequiredProductType[];
+    orderProducts: OrderProduct[];
+    onAddOrderLine: (product: RequiredProductType, quantityOrdered: number) => void;
+    onUpdateOrderLineQuantity: (requiredProductId: string, quantityOrdered: number) => void;
+    onRemoveOrderLine: (requiredProductId: string) => void;
 }
 
 
@@ -13,7 +23,12 @@ export default function RequiredProductsList(props: RequiredProductsListProps) {
     const [selectedSupplier, setSelectedSupplier] = useState<string>("all");
     const [editingProductId, setEditingProductId] = useState<string | null>(null);
     const [editingQuantity, setEditingQuantity] = useState<string>("");
+    const [editingUnit, setEditingUnit] = useState<string>("");
     const [savingProductId, setSavingProductId] = useState<string | null>(null);
+    const orderedQuantityByProductId = new Map(props.orderProducts.map(({ line }) => [
+        line.requiredProductId,
+        line.quantityOrdered,
+    ]));
 
     useEffect(() => {
         setRequiredProducts(props.requiredProducts);
@@ -31,12 +46,18 @@ export default function RequiredProductsList(props: RequiredProductsListProps) {
     function startEditing(product: RequiredProductType) {
         setEditingProductId(product.id);
         setEditingQuantity(String(product.defaultQuantity));
+        setEditingUnit(product.defaultUnit);
     }
 
-    async function saveDefaultQuantity(product: RequiredProductType) {
+    async function saveDefaultSettings(product: RequiredProductType, event?: FormEvent<HTMLFormElement>) {
+        event?.preventDefault();
+
         const defaultQuantity = Number(editingQuantity);
-        if (!Number.isFinite(defaultQuantity) || defaultQuantity < 0) {
+        const defaultUnit = editingUnit.trim();
+
+        if (!Number.isFinite(defaultQuantity) || defaultQuantity < 0 || defaultUnit.length === 0) {
             setEditingQuantity(String(product.defaultQuantity));
+            setEditingUnit(product.defaultUnit);
             setEditingProductId(null);
             return;
         }
@@ -44,7 +65,7 @@ export default function RequiredProductsList(props: RequiredProductsListProps) {
         setSavingProductId(product.id);
 
         try {
-            const updatedProduct = await updateRequiredProductDefaultQuantity(product.id, defaultQuantity);
+            const updatedProduct = await updateRequiredProductDefaults(product.id, defaultQuantity, defaultUnit);
             setRequiredProducts((currentProducts) => currentProducts.map((currentProduct) => (
                 currentProduct.id === updatedProduct.id ? updatedProduct : currentProduct
             )));
@@ -52,6 +73,20 @@ export default function RequiredProductsList(props: RequiredProductsListProps) {
         } finally {
             setSavingProductId(null);
         }
+    }
+
+    function updateOrderQuantity(product: RequiredProductType, quantityOrdered: number) {
+        if (quantityOrdered <= 0) {
+            props.onRemoveOrderLine(product.id);
+            return;
+        }
+
+        if (orderedQuantityByProductId.has(product.id)) {
+            props.onUpdateOrderLineQuantity(product.id, quantityOrdered);
+            return;
+        }
+
+        props.onAddOrderLine(product, quantityOrdered);
     }
 
     return (
@@ -82,39 +117,60 @@ export default function RequiredProductsList(props: RequiredProductsListProps) {
                                         <strong>{product.name}</strong>
                                         <span>{product.supplier.name}</span>
                                     </div>
-                                    <p>
-                                        {editingProductId === product.id ? (
-                                            <input
-                                                className="product-card-quantity-input"
-                                                type="number"
-                                                autoFocus
-                                                min="0"
-                                                value={editingQuantity}
-                                                disabled={savingProductId === product.id}
-                                                onChange={(event) => setEditingQuantity(event.target.value)}
-                                                onBlur={() => saveDefaultQuantity(product)}
-                                                onKeyDown={(event) => {
-                                                    if (event.key === "Enter") {
-                                                        event.currentTarget.blur();
-                                                    }
-
-                                                    if (event.key === "Escape") {
-                                                        setEditingProductId(null);
-                                                        setEditingQuantity("");
-                                                    }
-                                                }}
-                                            />
-                                        ) : (
-                                            <button
-                                                className="product-card-quantity-button"
-                                                type="button"
-                                                onClick={() => startEditing(product)}
-                                            >
-                                                {product.defaultQuantity}
-                                            </button>
-                                        )}
-                                        <span>{product.defaultUnit}</span>
-                                    </p>
+                                    <div className="product-card-actions">
+                                        <ProductOrderQuantity
+                                            quantity={orderedQuantityByProductId.get(product.id) ?? 0}
+                                            defaultQuantity={product.defaultQuantity}
+                                            unit={product.defaultUnit}
+                                            onDecrease={() => updateOrderQuantity(
+                                                product,
+                                                (orderedQuantityByProductId.get(product.id) ?? 0) - 1
+                                            )}
+                                            onIncrease={() => updateOrderQuantity(
+                                                product,
+                                                (orderedQuantityByProductId.get(product.id) ?? 0) + 1
+                                            )}
+                                        />
+                                        <details
+                                            className="product-card-menu"
+                                            open={editingProductId === product.id}
+                                            onToggle={(event) => {
+                                                if (event.currentTarget.open) {
+                                                    startEditing(product);
+                                                } else if (editingProductId === product.id) {
+                                                    setEditingProductId(null);
+                                                    setEditingQuantity("");
+                                                    setEditingUnit("");
+                                                }
+                                            }}
+                                        >
+                                            <summary aria-label="Opciones del producto">...</summary>
+                                            <form onSubmit={(event) => saveDefaultSettings(product, event)}>
+                                                <label>
+                                                    <span>Cantidad habitual</span>
+                                                    <input
+                                                        type="number"
+                                                        min="0"
+                                                        value={editingQuantity}
+                                                        disabled={savingProductId === product.id}
+                                                        onChange={(event) => setEditingQuantity(event.target.value)}
+                                                    />
+                                                </label>
+                                                <label>
+                                                    <span>Unidad habitual</span>
+                                                    <input
+                                                        type="text"
+                                                        value={editingUnit}
+                                                        disabled={savingProductId === product.id}
+                                                        onChange={(event) => setEditingUnit(event.target.value)}
+                                                    />
+                                                </label>
+                                                <button type="submit" disabled={savingProductId === product.id}>
+                                                    {savingProductId === product.id ? "Guardando..." : "Guardar"}
+                                                </button>
+                                            </form>
+                                        </details>
+                                    </div>
                                 </li>
                             )
                         })
@@ -124,4 +180,31 @@ export default function RequiredProductsList(props: RequiredProductsListProps) {
         </section>
 
     )
+}
+
+type ProductOrderQuantityProps = {
+    quantity: number;
+    defaultQuantity: number;
+    unit: string;
+    onDecrease: () => void;
+    onIncrease: () => void;
+};
+
+function ProductOrderQuantity({
+    quantity,
+    defaultQuantity,
+    unit,
+    onDecrease,
+    onIncrease,
+}: ProductOrderQuantityProps) {
+    return (
+        <div className={quantity > 0 ? "product-order-stepper has-order" : "product-order-stepper"}>
+            <button type="button" aria-label="Restar cantidad del pedido" onClick={onDecrease}>-</button>
+            <div>
+                <strong>{quantity} / {defaultQuantity}</strong>
+                <span>{unit}</span>
+            </div>
+            <button type="button" aria-label="Sumar cantidad al pedido" onClick={onIncrease}>+</button>
+        </div>
+    );
 }
