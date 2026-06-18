@@ -233,6 +233,7 @@ export type RequiredProductWhereInput = {
   restaurantId?: Prisma.StringFilter<"RequiredProduct"> | string
   supplierId?: Prisma.StringFilter<"RequiredProduct"> | string
   orderLines?: Prisma.OrderLineListRelationFilter
+  roundDecisions?: Prisma.RoundDecisionListRelationFilter
   restaurant?: Prisma.XOR<Prisma.RestaurantScalarRelationFilter, Prisma.RestaurantWhereInput>
   supplier?: Prisma.XOR<Prisma.SupplierScalarRelationFilter, Prisma.SupplierWhereInput>
 }
@@ -246,6 +247,7 @@ export type RequiredProductOrderByWithRelationInput = {
   restaurantId?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
   orderLines?: Prisma.OrderLineOrderByRelationAggregateInput
+  roundDecisions?: Prisma.RoundDecisionOrderByRelationAggregateInput
   restaurant?: Prisma.RestaurantOrderByWithRelationInput
   supplier?: Prisma.SupplierOrderByWithRelationInput
 }
@@ -263,6 +265,7 @@ export type RequiredProductWhereUniqueInput = Prisma.AtLeast<{
   restaurantId?: Prisma.StringFilter<"RequiredProduct"> | string
   supplierId?: Prisma.StringFilter<"RequiredProduct"> | string
   orderLines?: Prisma.OrderLineListRelationFilter
+  roundDecisions?: Prisma.RoundDecisionListRelationFilter
   restaurant?: Prisma.XOR<Prisma.RestaurantScalarRelationFilter, Prisma.RestaurantWhereInput>
   supplier?: Prisma.XOR<Prisma.SupplierScalarRelationFilter, Prisma.SupplierWhereInput>
 }, "id" | "restaurantId_name">
@@ -302,6 +305,7 @@ export type RequiredProductCreateInput = {
   defaultUnit: string
   isActive?: boolean
   orderLines?: Prisma.OrderLineCreateNestedManyWithoutRequiredProductInput
+  roundDecisions?: Prisma.RoundDecisionCreateNestedManyWithoutRequiredProductInput
   restaurant: Prisma.RestaurantCreateNestedOneWithoutRequiredProductsInput
   supplier: Prisma.SupplierCreateNestedOneWithoutRequiredProductsInput
 }
@@ -315,6 +319,7 @@ export type RequiredProductUncheckedCreateInput = {
   restaurantId: string
   supplierId: string
   orderLines?: Prisma.OrderLineUncheckedCreateNestedManyWithoutRequiredProductInput
+  roundDecisions?: Prisma.RoundDecisionUncheckedCreateNestedManyWithoutRequiredProductInput
 }
 
 export type RequiredProductUpdateInput = {
@@ -324,6 +329,7 @@ export type RequiredProductUpdateInput = {
   defaultUnit?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   orderLines?: Prisma.OrderLineUpdateManyWithoutRequiredProductNestedInput
+  roundDecisions?: Prisma.RoundDecisionUpdateManyWithoutRequiredProductNestedInput
   restaurant?: Prisma.RestaurantUpdateOneRequiredWithoutRequiredProductsNestedInput
   supplier?: Prisma.SupplierUpdateOneRequiredWithoutRequiredProductsNestedInput
 }
@@ -337,6 +343,7 @@ export type RequiredProductUncheckedUpdateInput = {
   restaurantId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierId?: Prisma.StringFieldUpdateOperationsInput | string
   orderLines?: Prisma.OrderLineUncheckedUpdateManyWithoutRequiredProductNestedInput
+  roundDecisions?: Prisma.RoundDecisionUncheckedUpdateManyWithoutRequiredProductNestedInput
 }
 
 export type RequiredProductCreateManyInput = {
@@ -535,6 +542,20 @@ export type RequiredProductUpdateOneRequiredWithoutOrderLinesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.RequiredProductUpdateToOneWithWhereWithoutOrderLinesInput, Prisma.RequiredProductUpdateWithoutOrderLinesInput>, Prisma.RequiredProductUncheckedUpdateWithoutOrderLinesInput>
 }
 
+export type RequiredProductCreateNestedOneWithoutRoundDecisionsInput = {
+  create?: Prisma.XOR<Prisma.RequiredProductCreateWithoutRoundDecisionsInput, Prisma.RequiredProductUncheckedCreateWithoutRoundDecisionsInput>
+  connectOrCreate?: Prisma.RequiredProductCreateOrConnectWithoutRoundDecisionsInput
+  connect?: Prisma.RequiredProductWhereUniqueInput
+}
+
+export type RequiredProductUpdateOneRequiredWithoutRoundDecisionsNestedInput = {
+  create?: Prisma.XOR<Prisma.RequiredProductCreateWithoutRoundDecisionsInput, Prisma.RequiredProductUncheckedCreateWithoutRoundDecisionsInput>
+  connectOrCreate?: Prisma.RequiredProductCreateOrConnectWithoutRoundDecisionsInput
+  upsert?: Prisma.RequiredProductUpsertWithoutRoundDecisionsInput
+  connect?: Prisma.RequiredProductWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RequiredProductUpdateToOneWithWhereWithoutRoundDecisionsInput, Prisma.RequiredProductUpdateWithoutRoundDecisionsInput>, Prisma.RequiredProductUncheckedUpdateWithoutRoundDecisionsInput>
+}
+
 export type RequiredProductCreateWithoutRestaurantInput = {
   id?: string
   name: string
@@ -542,6 +563,7 @@ export type RequiredProductCreateWithoutRestaurantInput = {
   defaultUnit: string
   isActive?: boolean
   orderLines?: Prisma.OrderLineCreateNestedManyWithoutRequiredProductInput
+  roundDecisions?: Prisma.RoundDecisionCreateNestedManyWithoutRequiredProductInput
   supplier: Prisma.SupplierCreateNestedOneWithoutRequiredProductsInput
 }
 
@@ -553,6 +575,7 @@ export type RequiredProductUncheckedCreateWithoutRestaurantInput = {
   isActive?: boolean
   supplierId: string
   orderLines?: Prisma.OrderLineUncheckedCreateNestedManyWithoutRequiredProductInput
+  roundDecisions?: Prisma.RoundDecisionUncheckedCreateNestedManyWithoutRequiredProductInput
 }
 
 export type RequiredProductCreateOrConnectWithoutRestaurantInput = {
@@ -601,6 +624,7 @@ export type RequiredProductCreateWithoutSupplierInput = {
   defaultUnit: string
   isActive?: boolean
   orderLines?: Prisma.OrderLineCreateNestedManyWithoutRequiredProductInput
+  roundDecisions?: Prisma.RoundDecisionCreateNestedManyWithoutRequiredProductInput
   restaurant: Prisma.RestaurantCreateNestedOneWithoutRequiredProductsInput
 }
 
@@ -612,6 +636,7 @@ export type RequiredProductUncheckedCreateWithoutSupplierInput = {
   isActive?: boolean
   restaurantId: string
   orderLines?: Prisma.OrderLineUncheckedCreateNestedManyWithoutRequiredProductInput
+  roundDecisions?: Prisma.RoundDecisionUncheckedCreateNestedManyWithoutRequiredProductInput
 }
 
 export type RequiredProductCreateOrConnectWithoutSupplierInput = {
@@ -646,6 +671,7 @@ export type RequiredProductCreateWithoutOrderLinesInput = {
   defaultQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   defaultUnit: string
   isActive?: boolean
+  roundDecisions?: Prisma.RoundDecisionCreateNestedManyWithoutRequiredProductInput
   restaurant: Prisma.RestaurantCreateNestedOneWithoutRequiredProductsInput
   supplier: Prisma.SupplierCreateNestedOneWithoutRequiredProductsInput
 }
@@ -658,6 +684,7 @@ export type RequiredProductUncheckedCreateWithoutOrderLinesInput = {
   isActive?: boolean
   restaurantId: string
   supplierId: string
+  roundDecisions?: Prisma.RoundDecisionUncheckedCreateNestedManyWithoutRequiredProductInput
 }
 
 export type RequiredProductCreateOrConnectWithoutOrderLinesInput = {
@@ -682,6 +709,7 @@ export type RequiredProductUpdateWithoutOrderLinesInput = {
   defaultQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   defaultUnit?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roundDecisions?: Prisma.RoundDecisionUpdateManyWithoutRequiredProductNestedInput
   restaurant?: Prisma.RestaurantUpdateOneRequiredWithoutRequiredProductsNestedInput
   supplier?: Prisma.SupplierUpdateOneRequiredWithoutRequiredProductsNestedInput
 }
@@ -694,6 +722,67 @@ export type RequiredProductUncheckedUpdateWithoutOrderLinesInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   restaurantId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierId?: Prisma.StringFieldUpdateOperationsInput | string
+  roundDecisions?: Prisma.RoundDecisionUncheckedUpdateManyWithoutRequiredProductNestedInput
+}
+
+export type RequiredProductCreateWithoutRoundDecisionsInput = {
+  id?: string
+  name: string
+  defaultQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  defaultUnit: string
+  isActive?: boolean
+  orderLines?: Prisma.OrderLineCreateNestedManyWithoutRequiredProductInput
+  restaurant: Prisma.RestaurantCreateNestedOneWithoutRequiredProductsInput
+  supplier: Prisma.SupplierCreateNestedOneWithoutRequiredProductsInput
+}
+
+export type RequiredProductUncheckedCreateWithoutRoundDecisionsInput = {
+  id?: string
+  name: string
+  defaultQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  defaultUnit: string
+  isActive?: boolean
+  restaurantId: string
+  supplierId: string
+  orderLines?: Prisma.OrderLineUncheckedCreateNestedManyWithoutRequiredProductInput
+}
+
+export type RequiredProductCreateOrConnectWithoutRoundDecisionsInput = {
+  where: Prisma.RequiredProductWhereUniqueInput
+  create: Prisma.XOR<Prisma.RequiredProductCreateWithoutRoundDecisionsInput, Prisma.RequiredProductUncheckedCreateWithoutRoundDecisionsInput>
+}
+
+export type RequiredProductUpsertWithoutRoundDecisionsInput = {
+  update: Prisma.XOR<Prisma.RequiredProductUpdateWithoutRoundDecisionsInput, Prisma.RequiredProductUncheckedUpdateWithoutRoundDecisionsInput>
+  create: Prisma.XOR<Prisma.RequiredProductCreateWithoutRoundDecisionsInput, Prisma.RequiredProductUncheckedCreateWithoutRoundDecisionsInput>
+  where?: Prisma.RequiredProductWhereInput
+}
+
+export type RequiredProductUpdateToOneWithWhereWithoutRoundDecisionsInput = {
+  where?: Prisma.RequiredProductWhereInput
+  data: Prisma.XOR<Prisma.RequiredProductUpdateWithoutRoundDecisionsInput, Prisma.RequiredProductUncheckedUpdateWithoutRoundDecisionsInput>
+}
+
+export type RequiredProductUpdateWithoutRoundDecisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  defaultUnit?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  orderLines?: Prisma.OrderLineUpdateManyWithoutRequiredProductNestedInput
+  restaurant?: Prisma.RestaurantUpdateOneRequiredWithoutRequiredProductsNestedInput
+  supplier?: Prisma.SupplierUpdateOneRequiredWithoutRequiredProductsNestedInput
+}
+
+export type RequiredProductUncheckedUpdateWithoutRoundDecisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  defaultUnit?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  restaurantId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierId?: Prisma.StringFieldUpdateOperationsInput | string
+  orderLines?: Prisma.OrderLineUncheckedUpdateManyWithoutRequiredProductNestedInput
 }
 
 export type RequiredProductCreateManyRestaurantInput = {
@@ -712,6 +801,7 @@ export type RequiredProductUpdateWithoutRestaurantInput = {
   defaultUnit?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   orderLines?: Prisma.OrderLineUpdateManyWithoutRequiredProductNestedInput
+  roundDecisions?: Prisma.RoundDecisionUpdateManyWithoutRequiredProductNestedInput
   supplier?: Prisma.SupplierUpdateOneRequiredWithoutRequiredProductsNestedInput
 }
 
@@ -723,6 +813,7 @@ export type RequiredProductUncheckedUpdateWithoutRestaurantInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   supplierId?: Prisma.StringFieldUpdateOperationsInput | string
   orderLines?: Prisma.OrderLineUncheckedUpdateManyWithoutRequiredProductNestedInput
+  roundDecisions?: Prisma.RoundDecisionUncheckedUpdateManyWithoutRequiredProductNestedInput
 }
 
 export type RequiredProductUncheckedUpdateManyWithoutRestaurantInput = {
@@ -750,6 +841,7 @@ export type RequiredProductUpdateWithoutSupplierInput = {
   defaultUnit?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   orderLines?: Prisma.OrderLineUpdateManyWithoutRequiredProductNestedInput
+  roundDecisions?: Prisma.RoundDecisionUpdateManyWithoutRequiredProductNestedInput
   restaurant?: Prisma.RestaurantUpdateOneRequiredWithoutRequiredProductsNestedInput
 }
 
@@ -761,6 +853,7 @@ export type RequiredProductUncheckedUpdateWithoutSupplierInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   restaurantId?: Prisma.StringFieldUpdateOperationsInput | string
   orderLines?: Prisma.OrderLineUncheckedUpdateManyWithoutRequiredProductNestedInput
+  roundDecisions?: Prisma.RoundDecisionUncheckedUpdateManyWithoutRequiredProductNestedInput
 }
 
 export type RequiredProductUncheckedUpdateManyWithoutSupplierInput = {
@@ -779,10 +872,12 @@ export type RequiredProductUncheckedUpdateManyWithoutSupplierInput = {
 
 export type RequiredProductCountOutputType = {
   orderLines: number
+  roundDecisions: number
 }
 
 export type RequiredProductCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   orderLines?: boolean | RequiredProductCountOutputTypeCountOrderLinesArgs
+  roundDecisions?: boolean | RequiredProductCountOutputTypeCountRoundDecisionsArgs
 }
 
 /**
@@ -802,6 +897,13 @@ export type RequiredProductCountOutputTypeCountOrderLinesArgs<ExtArgs extends ru
   where?: Prisma.OrderLineWhereInput
 }
 
+/**
+ * RequiredProductCountOutputType without action
+ */
+export type RequiredProductCountOutputTypeCountRoundDecisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RoundDecisionWhereInput
+}
+
 
 export type RequiredProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -812,6 +914,7 @@ export type RequiredProductSelect<ExtArgs extends runtime.Types.Extensions.Inter
   restaurantId?: boolean
   supplierId?: boolean
   orderLines?: boolean | Prisma.RequiredProduct$orderLinesArgs<ExtArgs>
+  roundDecisions?: boolean | Prisma.RequiredProduct$roundDecisionsArgs<ExtArgs>
   restaurant?: boolean | Prisma.RestaurantDefaultArgs<ExtArgs>
   supplier?: boolean | Prisma.SupplierDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.RequiredProductCountOutputTypeDefaultArgs<ExtArgs>
@@ -854,6 +957,7 @@ export type RequiredProductSelectScalar = {
 export type RequiredProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "defaultQuantity" | "defaultUnit" | "isActive" | "restaurantId" | "supplierId", ExtArgs["result"]["requiredProduct"]>
 export type RequiredProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   orderLines?: boolean | Prisma.RequiredProduct$orderLinesArgs<ExtArgs>
+  roundDecisions?: boolean | Prisma.RequiredProduct$roundDecisionsArgs<ExtArgs>
   restaurant?: boolean | Prisma.RestaurantDefaultArgs<ExtArgs>
   supplier?: boolean | Prisma.SupplierDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.RequiredProductCountOutputTypeDefaultArgs<ExtArgs>
@@ -871,6 +975,7 @@ export type $RequiredProductPayload<ExtArgs extends runtime.Types.Extensions.Int
   name: "RequiredProduct"
   objects: {
     orderLines: Prisma.$OrderLinePayload<ExtArgs>[]
+    roundDecisions: Prisma.$RoundDecisionPayload<ExtArgs>[]
     restaurant: Prisma.$RestaurantPayload<ExtArgs>
     supplier: Prisma.$SupplierPayload<ExtArgs>
   }
@@ -1277,6 +1382,7 @@ readonly fields: RequiredProductFieldRefs;
 export interface Prisma__RequiredProductClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   orderLines<T extends Prisma.RequiredProduct$orderLinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RequiredProduct$orderLinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderLinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  roundDecisions<T extends Prisma.RequiredProduct$roundDecisionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RequiredProduct$roundDecisionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoundDecisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   restaurant<T extends Prisma.RestaurantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RestaurantDefaultArgs<ExtArgs>>): Prisma.Prisma__RestaurantClient<runtime.Types.Result.GetResult<Prisma.$RestaurantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   supplier<T extends Prisma.SupplierDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SupplierDefaultArgs<ExtArgs>>): Prisma.Prisma__SupplierClient<runtime.Types.Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
@@ -1737,6 +1843,30 @@ export type RequiredProduct$orderLinesArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.OrderLineScalarFieldEnum | Prisma.OrderLineScalarFieldEnum[]
+}
+
+/**
+ * RequiredProduct.roundDecisions
+ */
+export type RequiredProduct$roundDecisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RoundDecision
+   */
+  select?: Prisma.RoundDecisionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RoundDecision
+   */
+  omit?: Prisma.RoundDecisionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RoundDecisionInclude<ExtArgs> | null
+  where?: Prisma.RoundDecisionWhereInput
+  orderBy?: Prisma.RoundDecisionOrderByWithRelationInput | Prisma.RoundDecisionOrderByWithRelationInput[]
+  cursor?: Prisma.RoundDecisionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RoundDecisionScalarFieldEnum | Prisma.RoundDecisionScalarFieldEnum[]
 }
 
 /**

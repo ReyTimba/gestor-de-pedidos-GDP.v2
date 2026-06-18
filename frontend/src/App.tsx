@@ -2,8 +2,9 @@ import { useState } from "react";
 import RequiredProductsPage from "./pages/RequiredProductsPage";
 import SuppliersPage from "./pages/SuppliersPage";
 import RoundPage from "./pages/RoundPage";
+import RoundHistoryPage from "./pages/RoundHistoryPage";
 
-type view = "products" | "suppliers" | "round" | "order"
+type view = "products" | "suppliers" | "round" | "order" | "history"
 export default function App() {
 
   const [view, setView] = useState<view>("round")
@@ -16,6 +17,7 @@ export default function App() {
       <main>
         {view === "suppliers" && <SuppliersPage/>}
         {view === "products" && <RequiredProductsPage/>}
+        {view === "history" && <RoundHistoryPage/>}
         {(view === "round" || view === "order") && (
           <RoundPage
             view={view === "order" ? "order" : "round"}
@@ -38,6 +40,13 @@ export default function App() {
           onClick={() => setView("order")}>
           <span className="nav-icon nav-icon-order" aria-hidden="true"></span>
           Pedido
+        </button>
+        <button
+          type="button"
+          className={view === "history" ? "is-active" : ""}
+          onClick={() => setView("history")}>
+          <span className="nav-icon nav-icon-history" aria-hidden="true"></span>
+          Historial
         </button>
         <button
           type="button"

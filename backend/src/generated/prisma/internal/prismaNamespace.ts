@@ -389,7 +389,9 @@ export const ModelName = {
   RequiredProduct: 'RequiredProduct',
   Supplier: 'Supplier',
   Order: 'Order',
-  OrderLine: 'OrderLine'
+  OrderLine: 'OrderLine',
+  OrderRound: 'OrderRound',
+  RoundDecision: 'RoundDecision'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -405,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "restaurant" | "user" | "requiredProduct" | "supplier" | "order" | "orderLine"
+    modelProps: "restaurant" | "user" | "requiredProduct" | "supplier" | "order" | "orderLine" | "orderRound" | "roundDecision"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -853,6 +855,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    OrderRound: {
+      payload: Prisma.$OrderRoundPayload<ExtArgs>
+      fields: Prisma.OrderRoundFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OrderRoundFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderRoundPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OrderRoundFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderRoundPayload>
+        }
+        findFirst: {
+          args: Prisma.OrderRoundFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderRoundPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OrderRoundFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderRoundPayload>
+        }
+        findMany: {
+          args: Prisma.OrderRoundFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderRoundPayload>[]
+        }
+        create: {
+          args: Prisma.OrderRoundCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderRoundPayload>
+        }
+        createMany: {
+          args: Prisma.OrderRoundCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OrderRoundCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderRoundPayload>[]
+        }
+        delete: {
+          args: Prisma.OrderRoundDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderRoundPayload>
+        }
+        update: {
+          args: Prisma.OrderRoundUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderRoundPayload>
+        }
+        deleteMany: {
+          args: Prisma.OrderRoundDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OrderRoundUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OrderRoundUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderRoundPayload>[]
+        }
+        upsert: {
+          args: Prisma.OrderRoundUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderRoundPayload>
+        }
+        aggregate: {
+          args: Prisma.OrderRoundAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOrderRound>
+        }
+        groupBy: {
+          args: Prisma.OrderRoundGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrderRoundGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OrderRoundCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrderRoundCountAggregateOutputType> | number
+        }
+      }
+    }
+    RoundDecision: {
+      payload: Prisma.$RoundDecisionPayload<ExtArgs>
+      fields: Prisma.RoundDecisionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RoundDecisionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoundDecisionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RoundDecisionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoundDecisionPayload>
+        }
+        findFirst: {
+          args: Prisma.RoundDecisionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoundDecisionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RoundDecisionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoundDecisionPayload>
+        }
+        findMany: {
+          args: Prisma.RoundDecisionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoundDecisionPayload>[]
+        }
+        create: {
+          args: Prisma.RoundDecisionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoundDecisionPayload>
+        }
+        createMany: {
+          args: Prisma.RoundDecisionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RoundDecisionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoundDecisionPayload>[]
+        }
+        delete: {
+          args: Prisma.RoundDecisionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoundDecisionPayload>
+        }
+        update: {
+          args: Prisma.RoundDecisionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoundDecisionPayload>
+        }
+        deleteMany: {
+          args: Prisma.RoundDecisionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RoundDecisionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RoundDecisionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoundDecisionPayload>[]
+        }
+        upsert: {
+          args: Prisma.RoundDecisionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoundDecisionPayload>
+        }
+        aggregate: {
+          args: Prisma.RoundDecisionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRoundDecision>
+        }
+        groupBy: {
+          args: Prisma.RoundDecisionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RoundDecisionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RoundDecisionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RoundDecisionCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -938,7 +1088,8 @@ export const OrderScalarFieldEnum = {
   createdAt: 'createdAt',
   orderStatus: 'orderStatus',
   restaurantId: 'restaurantId',
-  userId: 'userId'
+  userId: 'userId',
+  orderRoundId: 'orderRoundId'
 } as const
 
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
@@ -956,6 +1107,31 @@ export const OrderLineScalarFieldEnum = {
 } as const
 
 export type OrderLineScalarFieldEnum = (typeof OrderLineScalarFieldEnum)[keyof typeof OrderLineScalarFieldEnum]
+
+
+export const OrderRoundScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  startedAt: 'startedAt',
+  closedAt: 'closedAt',
+  restaurantId: 'restaurantId',
+  userId: 'userId'
+} as const
+
+export type OrderRoundScalarFieldEnum = (typeof OrderRoundScalarFieldEnum)[keyof typeof OrderRoundScalarFieldEnum]
+
+
+export const RoundDecisionScalarFieldEnum = {
+  id: 'id',
+  action: 'action',
+  quantityOrdered: 'quantityOrdered',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  orderRoundId: 'orderRoundId',
+  requiredProductId: 'requiredProductId'
+} as const
+
+export type RoundDecisionScalarFieldEnum = (typeof RoundDecisionScalarFieldEnum)[keyof typeof RoundDecisionScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1048,6 +1224,34 @@ export type EnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
  * Reference to a field of type 'OrderStatus[]'
  */
 export type ListEnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'OrderRoundStatus'
+ */
+export type EnumOrderRoundStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderRoundStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'OrderRoundStatus[]'
+ */
+export type ListEnumOrderRoundStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderRoundStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'RoundDecisionAction'
+ */
+export type EnumRoundDecisionActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoundDecisionAction'>
+    
+
+
+/**
+ * Reference to a field of type 'RoundDecisionAction[]'
+ */
+export type ListEnumRoundDecisionActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoundDecisionAction[]'>
     
 
 
@@ -1180,6 +1384,8 @@ export type GlobalOmitConfig = {
   supplier?: Prisma.SupplierOmit
   order?: Prisma.OrderOmit
   orderLine?: Prisma.OrderLineOmit
+  orderRound?: Prisma.OrderRoundOmit
+  roundDecision?: Prisma.RoundDecisionOmit
 }
 
 /* Types for Logging */

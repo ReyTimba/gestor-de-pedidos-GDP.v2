@@ -16,3 +16,20 @@ export const OrderStatus = {
 } as const
 
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
+
+
+export const OrderRoundStatus = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED'
+} as const
+
+export type OrderRoundStatus = (typeof OrderRoundStatus)[keyof typeof OrderRoundStatus]
+
+
+export const RoundDecisionAction = {
+  ORDERED: 'ORDERED',
+  SKIPPED: 'SKIPPED',
+  POSTPONED: 'POSTPONED'
+} as const
+
+export type RoundDecisionAction = (typeof RoundDecisionAction)[keyof typeof RoundDecisionAction]

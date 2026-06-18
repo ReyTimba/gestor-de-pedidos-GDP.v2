@@ -47,3 +47,13 @@ export type Order = Prisma.OrderModel
  * 
  */
 export type OrderLine = Prisma.OrderLineModel
+/**
+ * Model OrderRound
+ * 
+ */
+export type OrderRound = Prisma.OrderRoundModel
+/**
+ * Model RoundDecision
+ * 
+ */
+export type RoundDecision = Prisma.RoundDecisionModel

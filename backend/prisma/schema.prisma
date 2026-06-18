@@ -15,6 +15,7 @@ model Restaurant {
   requiredProducts RequiredProduct[]
   suppliers Supplier[]
   orders Order[]
+  orderRounds OrderRound[]
 }
 
 model User {
@@ -22,6 +23,7 @@ model User {
   name String
 
   orders Order[]
+  orderRounds OrderRound[]
 
   restaurantId String
   restaurant Restaurant @relation(fields: [restaurantId], references: [id])
@@ -35,6 +37,7 @@ model RequiredProduct {
   isActive Boolean @default(true)
 
   orderLines OrderLine[]
+  roundDecisions RoundDecision[]
 
   restaurantId String
   restaurant Restaurant @relation(fields: [restaurantId], references: [id])
@@ -69,6 +72,9 @@ model Order {
   restaurant Restaurant @relation(fields: [restaurantId], references: [id])
   userId String
   user User @relation(fields: [userId], references: [id])
+
+  orderRoundId String? @unique
+  orderRound OrderRound? @relation(fields: [orderRoundId], references: [id])
 }
 
 model OrderLine {
@@ -84,10 +90,57 @@ model OrderLine {
 
   orderId String
   order Order @relation(fields: [orderId], references: [id])
+
+  @@unique([orderId, requiredProductId])
+}
+
+model OrderRound {
+  id String @id @default(uuid())
+  status OrderRoundStatus @default(OPEN)
+  startedAt DateTime @default(now())
+  closedAt DateTime?
+
+  decisions RoundDecision[]
+  order Order?
+
+  restaurantId String
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id])
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([restaurantId, status])
+  @@index([startedAt])
+}
+
+model RoundDecision {
+  id String @id @default(uuid())
+  action RoundDecisionAction
+  quantityOrdered Decimal?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orderRoundId String
+  orderRound OrderRound @relation(fields: [orderRoundId], references: [id], onDelete: Cascade)
+  requiredProductId String
+  requiredProduct RequiredProduct @relation(fields: [requiredProductId], references: [id])
+
+  @@unique([orderRoundId, requiredProductId])
+  @@index([requiredProductId])
 }
 
 enum OrderStatus {
   DRAFT
   UNDER_REVIEW
   SENT
+}
+
+enum OrderRoundStatus {
+  OPEN
+  CLOSED
+}
+
+enum RoundDecisionAction {
+  ORDERED
+  SKIPPED
+  POSTPONED
 }

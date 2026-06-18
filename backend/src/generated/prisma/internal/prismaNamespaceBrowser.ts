@@ -56,7 +56,9 @@ export const ModelName = {
   RequiredProduct: 'RequiredProduct',
   Supplier: 'Supplier',
   Order: 'Order',
-  OrderLine: 'OrderLine'
+  OrderLine: 'OrderLine',
+  OrderRound: 'OrderRound',
+  RoundDecision: 'RoundDecision'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -121,7 +123,8 @@ export const OrderScalarFieldEnum = {
   createdAt: 'createdAt',
   orderStatus: 'orderStatus',
   restaurantId: 'restaurantId',
-  userId: 'userId'
+  userId: 'userId',
+  orderRoundId: 'orderRoundId'
 } as const
 
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
@@ -139,6 +142,31 @@ export const OrderLineScalarFieldEnum = {
 } as const
 
 export type OrderLineScalarFieldEnum = (typeof OrderLineScalarFieldEnum)[keyof typeof OrderLineScalarFieldEnum]
+
+
+export const OrderRoundScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  startedAt: 'startedAt',
+  closedAt: 'closedAt',
+  restaurantId: 'restaurantId',
+  userId: 'userId'
+} as const
+
+export type OrderRoundScalarFieldEnum = (typeof OrderRoundScalarFieldEnum)[keyof typeof OrderRoundScalarFieldEnum]
+
+
+export const RoundDecisionScalarFieldEnum = {
+  id: 'id',
+  action: 'action',
+  quantityOrdered: 'quantityOrdered',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  orderRoundId: 'orderRoundId',
+  requiredProductId: 'requiredProductId'
+} as const
+
+export type RoundDecisionScalarFieldEnum = (typeof RoundDecisionScalarFieldEnum)[keyof typeof RoundDecisionScalarFieldEnum]
 
 
 export const SortOrder = {

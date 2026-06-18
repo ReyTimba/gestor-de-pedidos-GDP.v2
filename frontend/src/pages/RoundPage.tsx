@@ -4,7 +4,7 @@ import { CurrentOrderView } from "../components/round/CurrentOrderView";
 import { RoundProductCard } from "../components/round/RoundProductCard";
 import { useOrderDraft } from "../hooks/useOrderDraft";
 import { useProducts } from "../hooks/products.hooks";
-import { createOrder } from "../services/orders.services";
+import { closeCurrentRound } from "../services/rounds.services";
 
 type RoundView = "round" | "order";
 
@@ -36,6 +36,7 @@ export default function RoundPage({ view: controlledView, onViewChange }: RoundP
         skippedProducts,
         orderProducts,
         providersCount,
+        syncSummary,
         addOrderLine,
         skipProduct,
         postponeProduct,
@@ -150,7 +151,7 @@ export default function RoundPage({ view: controlledView, onViewChange }: RoundP
         setSaveError(null);
 
         try {
-            await createOrder({ orderLines });
+            await closeCurrentRound();
             clearDraft();
             setView("round");
         } catch {
@@ -278,6 +279,17 @@ export default function RoundPage({ view: controlledView, onViewChange }: RoundP
                 <p className="round-progress">
                     {pendingProducts.length} productos pendientes
                 </p>
+
+                {(syncSummary.pendingCount > 0 || syncSummary.failedCount > 0) && (
+                    <p className={[
+                        "round-sync-status",
+                        syncSummary.failedCount > 0 ? "has-sync-error" : "",
+                    ].filter(Boolean).join(" ")}>
+                        {syncSummary.failedCount > 0
+                            ? `${syncSummary.failedCount} cambios pendientes de sincronizar`
+                            : "Guardando cambios..."}
+                    </p>
+                )}
             </div>
         </div>
     )
