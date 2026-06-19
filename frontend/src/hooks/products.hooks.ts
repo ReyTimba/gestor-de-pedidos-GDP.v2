@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { RequiredProductType } from "../../../shared/product.schemas";
 import { getActiveRequiredProduct } from "../services/product.services";
 
-export function useProducts() {
+export function useProducts(includeInactive = false) {
     
     const [requiredProducts, setRequiredProducts] = useState<RequiredProductType[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
-        getActiveRequiredProduct()
+        getActiveRequiredProduct(includeInactive)
         .then(setRequiredProducts)
         .catch((error) => {
             console.error(error)
@@ -18,6 +18,6 @@ export function useProducts() {
         .finally(() => {
             setLoading(false)
         })
-    }, [])
+    }, [includeInactive])
     return {requiredProducts, loading, error}
 }

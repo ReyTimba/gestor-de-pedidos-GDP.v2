@@ -7,6 +7,13 @@ type OrderProduct = {
     product: RequiredProductType;
 };
 
+type SupplierMessageGroup = {
+    supplierId: string;
+    supplierName: string;
+    phone: string | null;
+    orderProducts: OrderProduct[];
+};
+
 type CurrentOrderViewProps = {
     orderProducts: OrderProduct[];
     skippedProducts: RequiredProductType[];
@@ -18,7 +25,7 @@ type CurrentOrderViewProps = {
     onAddSkippedToOrder: (product: RequiredProductType, quantityOrdered: number) => void;
 };
 
-type OrderReviewTab = "ordered" | "skipped";
+type OrderReviewTab = "ordered" | "skipped" | "messages";
 
 export function CurrentOrderView({
     orderProducts,
@@ -34,6 +41,7 @@ export function CurrentOrderView({
     const [orderedSupplierFilter, setOrderedSupplierFilter] = useState("all");
     const [skippedSupplierFilter, setSkippedSupplierFilter] = useState("all");
     const [skippedQuantities, setSkippedQuantities] = useState<Record<string, string>>({});
+    const [copiedSupplierId, setCopiedSupplierId] = useState<string | null>(null);
 
     const orderedSuppliers = useMemo(
         () => getUniqueSuppliers(orderProducts.map(({ product }) => product)),
@@ -43,6 +51,11 @@ export function CurrentOrderView({
     const skippedSuppliers = useMemo(
         () => getUniqueSuppliers(skippedProducts),
         [skippedProducts]
+    );
+
+    const supplierMessageGroups = useMemo(
+        () => groupOrderProductsBySupplier(orderProducts),
+        [orderProducts]
     );
 
     const filteredOrderProducts = useMemo(
@@ -86,6 +99,11 @@ export function CurrentOrderView({
         });
     }
 
+    async function handleCopySupplierMessage(group: SupplierMessageGroup) {
+        await navigator.clipboard.writeText(buildSupplierMessage(group));
+        setCopiedSupplierId(group.supplierId);
+    }
+
     return (
         <div className="current-order-view">
             <div className="order-review-tabs" role="tablist" aria-label="Pedido actual">
@@ -108,7 +126,14 @@ export function CurrentOrderView({
             {activeTab === "ordered" && (
             <section className="order-review-section">
                 <div className="order-review-title">
-                    <h2>Productos pedidos</h2>
+                    <button
+                        className="order-messages-open-button"
+                        type="button"
+                        disabled={orderProducts.length === 0}
+                        onClick={() => setActiveTab("messages")}
+                    >
+                        Mensajes
+                    </button>
                     <span>{orderProducts.length} lineas</span>
                 </div>
 
@@ -145,6 +170,37 @@ export function CurrentOrderView({
                                     <summary aria-label="Opciones del producto">...</summary>
                                     <button type="button" onClick={() => onRemoveLine(line.requiredProductId)}>Quitar</button>
                                 </details>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </section>
+            )}
+
+            {activeTab === "messages" && (
+            <section className="order-review-section">
+                <div className="order-review-title">
+                    <h2>Mensajes</h2>
+                    <button type="button" onClick={() => setActiveTab("ordered")}>Revisar</button>
+                </div>
+
+                {supplierMessageGroups.length === 0 ? (
+                    <p className="order-review-empty">Todavia no hay proveedores con productos pedidos.</p>
+                ) : (
+                    <ul className="supplier-message-list">
+                        {supplierMessageGroups.map((group) => (
+                            <li key={group.supplierId}>
+                                <div>
+                                    <strong>{group.supplierName}</strong>
+                                    <span>{group.phone ?? "Sin telefono"}</span>
+                                    <small>{group.orderProducts.length} productos</small>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() => handleCopySupplierMessage(group)}
+                                >
+                                    {copiedSupplierId === group.supplierId ? "Copiado" : "Copiar mensaje"}
+                                </button>
                             </li>
                         ))}
                     </ul>
@@ -260,4 +316,38 @@ function getUniqueSuppliers(products: RequiredProductType[]) {
             },
         ])).values()
     );
+}
+
+function groupOrderProductsBySupplier(orderProducts: OrderProduct[]) {
+    const groups = new Map<string, SupplierMessageGroup>();
+
+    for (const orderProduct of orderProducts) {
+        const supplier = orderProduct.product.supplier;
+        const group = groups.get(supplier.id) ?? {
+            supplierId: supplier.id,
+            supplierName: supplier.name,
+            phone: supplier.phone,
+            orderProducts: [],
+        };
+
+        group.orderProducts.push(orderProduct);
+        groups.set(supplier.id, group);
+    }
+
+    return Array.from(groups.values())
+        .map((group) => ({
+            ...group,
+            orderProducts: group.orderProducts.sort((a, b) => (
+                a.product.name.localeCompare(b.product.name)
+            )),
+        }))
+        .sort((a, b) => a.supplierName.localeCompare(b.supplierName));
+}
+
+function buildSupplierMessage(group: SupplierMessageGroup) {
+    const lines = group.orderProducts.map(({ line, product }) => (
+        `- ${product.name}: ${line.quantityOrdered} ${product.defaultUnit}`
+    ));
+
+    return [`Pedido ${group.supplierName}`, ...lines].join("\n");
 }

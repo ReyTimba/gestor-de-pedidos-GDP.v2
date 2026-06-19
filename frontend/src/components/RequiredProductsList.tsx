@@ -1,12 +1,14 @@
 import { FormEvent, useEffect, useState } from "react";
 import { CreateOrderLineType } from "../../../shared/order.schemas";
 import { RequiredProductType } from "../../../shared/product.schemas"
-import { updateRequiredProductDefaults } from "../services/product.services";
+import { updateRequiredProductDefaults, updateRequiredProductStatus } from "../services/product.services";
 
 type OrderProduct = {
     line: CreateOrderLineType;
     product: RequiredProductType;
 };
+
+type ProductCatalogTab = "active" | "inactive";
 
 export type RequiredProductsListProps = {
     requiredProducts: RequiredProductType[];
@@ -20,6 +22,7 @@ export type RequiredProductsListProps = {
 export default function RequiredProductsList(props: RequiredProductsListProps) {
 
     const [requiredProducts, setRequiredProducts] = useState<RequiredProductType[]>(props.requiredProducts);
+    const [activeTab, setActiveTab] = useState<ProductCatalogTab>("active");
     const [selectedSupplier, setSelectedSupplier] = useState<string>("all");
     const [editingProductId, setEditingProductId] = useState<string | null>(null);
     const [editingQuantity, setEditingQuantity] = useState<string>("");
@@ -34,12 +37,15 @@ export default function RequiredProductsList(props: RequiredProductsListProps) {
         setRequiredProducts(props.requiredProducts);
     }, [props.requiredProducts]);
 
+    const activeProducts = requiredProducts.filter((product) => product.isActive);
+    const inactiveProducts = requiredProducts.filter((product) => !product.isActive);
+    const tabProducts = activeTab === "active" ? activeProducts : inactiveProducts;
     const productsList = selectedSupplier === "all"
-        ? requiredProducts
-        : requiredProducts.filter(product => product.supplier.name === selectedSupplier);
+        ? tabProducts
+        : tabProducts.filter(product => product.supplier.name === selectedSupplier);
 
 
-    const suppliers = Array.from(new Set(requiredProducts.map(product => {
+    const suppliers = Array.from(new Set(tabProducts.map(product => {
         return product.supplier.name
     })));
 
@@ -89,10 +95,48 @@ export default function RequiredProductsList(props: RequiredProductsListProps) {
         props.onAddOrderLine(product, quantityOrdered);
     }
 
+    async function toggleProductStatus(product: RequiredProductType) {
+        setSavingProductId(product.id);
+
+        try {
+            const updatedProduct = await updateRequiredProductStatus(product.id, !product.isActive);
+            setRequiredProducts((currentProducts) => currentProducts.map((currentProduct) => (
+                currentProduct.id === updatedProduct.id ? updatedProduct : currentProduct
+            )));
+            setEditingProductId(null);
+            setEditingQuantity("");
+            setEditingUnit("");
+        } finally {
+            setSavingProductId(null);
+        }
+    }
+
     return (
         <section className="products-panel">
+            <div className="products-tabs" role="tablist" aria-label="Catalogo de productos">
+                <button
+                    type="button"
+                    className={activeTab === "active" ? "is-active" : ""}
+                    onClick={() => {
+                        setActiveTab("active");
+                        setSelectedSupplier("all");
+                    }}
+                >
+                    Productos requeridos
+                </button>
+                <button
+                    type="button"
+                    className={activeTab === "inactive" ? "is-active" : ""}
+                    onClick={() => {
+                        setActiveTab("inactive");
+                        setSelectedSupplier("all");
+                    }}
+                >
+                    Desactivados
+                </button>
+            </div>
             <div className="products-header">
-                <h2>Productos requeridos</h2>
+                <h2>{activeTab === "active" ? "Productos requeridos" : "Productos desactivados"}</h2>
                 <select
                     value={selectedSupplier}
                     onChange={(e) => {
@@ -118,19 +162,26 @@ export default function RequiredProductsList(props: RequiredProductsListProps) {
                                         <span>{product.supplier.name}</span>
                                     </div>
                                     <div className="product-card-actions">
-                                        <ProductOrderQuantity
-                                            quantity={orderedQuantityByProductId.get(product.id) ?? 0}
-                                            defaultQuantity={product.defaultQuantity}
-                                            unit={product.defaultUnit}
-                                            onDecrease={() => updateOrderQuantity(
-                                                product,
-                                                (orderedQuantityByProductId.get(product.id) ?? 0) - 1
-                                            )}
-                                            onIncrease={() => updateOrderQuantity(
-                                                product,
-                                                (orderedQuantityByProductId.get(product.id) ?? 0) + 1
-                                            )}
-                                        />
+                                        {product.isActive ? (
+                                            <ProductOrderQuantity
+                                                quantity={orderedQuantityByProductId.get(product.id) ?? 0}
+                                                defaultQuantity={product.defaultQuantity}
+                                                unit={product.defaultUnit}
+                                                onDecrease={() => updateOrderQuantity(
+                                                    product,
+                                                    (orderedQuantityByProductId.get(product.id) ?? 0) - 1
+                                                )}
+                                                onIncrease={() => updateOrderQuantity(
+                                                    product,
+                                                    (orderedQuantityByProductId.get(product.id) ?? 0) + 1
+                                                )}
+                                            />
+                                        ) : (
+                                            <div className="product-card-inactive-note">
+                                                <strong>{product.defaultQuantity}</strong>
+                                                <span>{product.defaultUnit}</span>
+                                            </div>
+                                        )}
                                         <details
                                             className="product-card-menu"
                                             open={editingProductId === product.id}
@@ -145,30 +196,40 @@ export default function RequiredProductsList(props: RequiredProductsListProps) {
                                             }}
                                         >
                                             <summary aria-label="Opciones del producto">...</summary>
-                                            <form onSubmit={(event) => saveDefaultSettings(product, event)}>
-                                                <label>
-                                                    <span>Cantidad habitual</span>
-                                                    <input
-                                                        type="number"
-                                                        min="0"
-                                                        value={editingQuantity}
-                                                        disabled={savingProductId === product.id}
-                                                        onChange={(event) => setEditingQuantity(event.target.value)}
-                                                    />
-                                                </label>
-                                                <label>
-                                                    <span>Unidad habitual</span>
-                                                    <input
-                                                        type="text"
-                                                        value={editingUnit}
-                                                        disabled={savingProductId === product.id}
-                                                        onChange={(event) => setEditingUnit(event.target.value)}
-                                                    />
-                                                </label>
-                                                <button type="submit" disabled={savingProductId === product.id}>
-                                                    {savingProductId === product.id ? "Guardando..." : "Guardar"}
+                                            <div className="product-card-menu-panel">
+                                                <form onSubmit={(event) => saveDefaultSettings(product, event)}>
+                                                    <label>
+                                                        <span>Cantidad habitual</span>
+                                                        <input
+                                                            type="number"
+                                                            min="0"
+                                                            value={editingQuantity}
+                                                            disabled={savingProductId === product.id}
+                                                            onChange={(event) => setEditingQuantity(event.target.value)}
+                                                        />
+                                                    </label>
+                                                    <label>
+                                                        <span>Unidad habitual</span>
+                                                        <input
+                                                            type="text"
+                                                            value={editingUnit}
+                                                            disabled={savingProductId === product.id}
+                                                            onChange={(event) => setEditingUnit(event.target.value)}
+                                                        />
+                                                    </label>
+                                                    <button type="submit" disabled={savingProductId === product.id}>
+                                                        {savingProductId === product.id ? "Guardando..." : "Guardar"}
+                                                    </button>
+                                                </form>
+                                                <button
+                                                    className={product.isActive ? "product-status-button is-danger" : "product-status-button"}
+                                                    type="button"
+                                                    disabled={savingProductId === product.id}
+                                                    onClick={() => toggleProductStatus(product)}
+                                                >
+                                                    {product.isActive ? "Desactivar producto" : "Activar producto"}
                                                 </button>
-                                            </form>
+                                            </div>
                                         </details>
                                     </div>
                                 </li>

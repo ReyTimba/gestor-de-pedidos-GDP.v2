@@ -18,3 +18,8 @@ export const UpdateRequiredProductDefaultsSchema = z.object({
     defaultUnit: z.string().trim().min(1),
 });
 export type UpdateRequiredProductDefaultsType = z.infer<typeof UpdateRequiredProductDefaultsSchema>;
+
+export const UpdateRequiredProductStatusSchema = z.object({
+    isActive: z.boolean(),
+});
+export type UpdateRequiredProductStatusType = z.infer<typeof UpdateRequiredProductStatusSchema>;

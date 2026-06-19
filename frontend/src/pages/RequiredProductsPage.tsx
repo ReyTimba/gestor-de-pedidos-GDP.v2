@@ -5,7 +5,7 @@ import { useOrderDraft } from "../hooks/useOrderDraft"
 
 export default function RequiredProductsPage() {
 
-    const { requiredProducts, loading, error } = useProducts()
+    const { requiredProducts, loading, error } = useProducts(true)
     const { orderProducts, addOrderLine, updateOrderLineQuantity, removeOrderLine } = useOrderDraft(requiredProducts)
 
     if (loading) return <p>cargando productos...</p>
